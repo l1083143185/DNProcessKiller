@@ -111,12 +111,10 @@ namespace ProcessKiller
                     FileName = Path.Combine(workingDir, fileName),
                     Arguments = args,
                     UseShellExecute = false,
-                    WorkingDirectory = workingDir,
+                    WorkingDirectory = workingDir
                 }
             };
             appInstance.Start();
-            //appInstance.ProcessorAffinity = (IntPtr)(Environment.ProcessorCount);
-            //appInstance.PriorityClass = ProcessPriorityClass.Normal;
             appInstance.Close();
         }
     }

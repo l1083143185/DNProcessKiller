@@ -8,7 +8,6 @@ namespace ProcessKiller
     using System.Threading.Tasks;
     using System.Drawing;
     using System.Management;
-    using ProcessKiller.Properties;
 
     class ProcessButton : Button
     {
@@ -124,30 +123,7 @@ namespace ProcessKiller
             this.BackColor = _disableColor;
             this.HidePerformanceCounter();
             this.Text = _killingMessage;
-
-            Task.Factory.StartNew(() =>
-            {
-                //KillProcessAndChildren(this.Process.Id);
-                DisconnectExistingTcpConnections(this.Process.Id);
-            });
-        }
-
-        public void DisconnectExistingTcpConnections(int pid)
-        {
-            try
-            {
-                Parallel.ForEach(ProcessPorts.ProcessPortMap(pid), (process) =>
-                {
-                    if (process.Protocol.StartsWith("TCP", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        Disconnecter.CloseLocalPort(process.PortNumber);
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(Resources.ProcessButton_DisconnectExistingTCPConnections_ErrorMessage + ex.Message, Resources.ApplicationName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            KillProcessAndChildren(this.Process.Id);
         }
 
         public void Highlight()
